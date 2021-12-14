@@ -1,0 +1,36 @@
+[tool.poetry]
+name = "Pet Projects API"
+version = "0.1.0"
+description = "An API to aggregate personal projects"
+authors = ["Diogo Alves <diogo.alves.ti@gmail.com>"]
+
+[tool.poetry.dependencies]
+python = "^3.10"
+fastapi = "^0.70.0"
+uvicorn = "^0.15.0"
+pydantic = {extras = ["email", "dotenv"], version = "^1.8.2"}
+passlib = {extras = ["bcrypt"], version = "^1.7.4"}
+python-jose = {extras = ["cryptography"], version = "^3.3.0"}
+python-multipart = "^0.0.5"
+alembic = "^1.7.5"
+typer = "^0.4.0"
+SQLAlchemy = {extras = ["mypy"], version = "^1.4.28"}
+
+[tool.poetry.dev-dependencies]
+black = "^21.11b1"
+isort = "^5.10.1"
+flake8 = "^4.0.1"
+mypy = "^0.910"
+SQLAlchemy = {extras = ["mypy"], version = "^1.4.28"}
+pre-commit = "^2.16.0"
+
+[tool.black]
+skip-string-normalization = true
+line-length = 79
+
+[tool.isort]
+profile = "black"
+
+[build-system]
+requires = ["poetry-core>=1.0.0"]
+build-backend = "poetry.core.masonry.api"
