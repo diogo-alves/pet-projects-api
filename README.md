@@ -8,3 +8,4 @@ This project contains:
 - [x] Authentication with JWT
 - [x] Layered Architecture
 - [x] Custom exceptions and handlers
+- [x] CLI to create superuser (built with Typer)
