@@ -1,4 +1,5 @@
 import typer
+from pydantic import ValidationError
 
 from app.core.config import settings
 from app.database import generate_db_session
@@ -40,9 +41,18 @@ def create_superuser(
             fg=typer.colors.GREEN,
             bold=True,
         )
-    except EmailAlreadyRegistredError as error:
+    except ValidationError as exc:
+        errors = '\n'.join(
+            f'  {error["loc"][0]}: {error["msg"]}' for error in exc.errors()
+        )
         message = typer.style(
-            error.message,
+            f'Failed to create superuser:\n{errors}',
+            fg=typer.colors.RED,
+            bold=True,
+        )
+    except EmailAlreadyRegistredError as exc:
+        message = typer.style(
+            exc.message,
             fg=typer.colors.YELLOW,
             bold=True,
         )
