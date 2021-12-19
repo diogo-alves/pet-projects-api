@@ -9,7 +9,7 @@ An API to aggregate personal projects. This is just an experimental project to t
 - [x] Layered Architecture
 - [x] Custom exceptions and handlers
 - [x] Database migrations with Alembic
-- [x] CLI to create superuser (built with Typer)
+- [x] A CLI tool built with Typer to manage users
 - [x] Dockenized app running PostgreSQL and pgAdmin
 
 ## Next steps:
