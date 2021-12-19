@@ -10,9 +10,9 @@ An API to aggregate personal projects. This is just an experimental project to t
 - [x] Custom exceptions and handlers
 - [x] Database migrations with Alembic
 - [x] CLI to create superuser (built with Typer)
+- [x] Containerize the app
 
 ## Next steps:
 - [ ] Create commands to manage migrations
-- [ ] Containerize the app
 - [ ] Add tests with Pytest
 - [ ] Deploy on Heroku
