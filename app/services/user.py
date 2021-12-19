@@ -23,6 +23,11 @@ class UserService:
     def _email_exists(self, email: str) -> bool:
         return self.repository.get(email=email) is not None
 
+    def change_password(self, username: str, new_password: str) -> None:
+        user = self.get_by_email(email=username)
+        user.password = new_password
+        self.repository.update(user)
+
     def list(self, skip: int, limit: int) -> List[models.User]:
         return self.repository.list(skip, limit)
 

@@ -3,7 +3,7 @@ from pydantic import ValidationError
 
 from app.core.config import settings
 from app.database import generate_db_session
-from app.exceptions import EmailAlreadyRegistredError
+from app.exceptions import EmailAlreadyRegistredError, NotFoundError
 from app.repositories import UserRepository
 from app.schemas import FullUserIn
 from app.services import UserService
@@ -54,6 +54,35 @@ def create_superuser(
         message = typer.style(
             exc.message,
             fg=typer.colors.YELLOW,
+            bold=True,
+        )
+    finally:
+        typer.echo(message)
+
+
+@app.command('changepassword')
+def change_password(
+    user_email: str = typer.Option(..., prompt=True),
+    new_password: str = typer.Option(
+        ...,
+        prompt=True,
+        confirmation_prompt=True,
+        hide_input=True,
+    ),
+) -> None:
+    user_service = get_user_service()
+    message = ''
+    try:
+        user_service.change_password(user_email, new_password)
+        message = typer.style(
+            'Password changed successfully.',
+            fg=typer.colors.GREEN,
+            bold=True,
+        )
+    except NotFoundError:
+        message = typer.style(
+            f'User with email {user_email!r} does not exist.',
+            fg=typer.colors.RED,
             bold=True,
         )
     finally:
