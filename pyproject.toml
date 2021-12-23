@@ -24,6 +24,9 @@ flake8 = "^4.0.1"
 mypy = "^0.910"
 SQLAlchemy = {extras = ["mypy"], version = "^1.4.28"}
 pre-commit = "^2.16.0"
+pytest = "^6.2.5"
+pytest-mock = "^3.6.1"
+pytest-cov = "^3.0.0"
 
 [tool.black]
 skip-string-normalization = true
