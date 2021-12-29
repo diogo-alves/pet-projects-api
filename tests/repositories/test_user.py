@@ -1,33 +1,4 @@
-from typing import List
-
-import pytest
-from sqlalchemy.orm import Session
-
 from app.models import User
-from app.repositories import UserRepository
-
-
-@pytest.fixture(scope='function')
-def user_repository(db_session: Session):
-    return UserRepository(db_session)
-
-
-@pytest.fixture
-def user(user_repository) -> User:
-    user = User(first_name='user', email='user@mail.com')
-    return user_repository.add(user)
-
-
-@pytest.fixture
-def users(user_repository) -> List[User]:
-    user1 = User(first_name='user1', email='user1@mail.com', is_superuser=True)
-    user2 = User(first_name='user2', email='user2@mail.com', is_superuser=True)
-    user3 = User(first_name='user3', email='user3@mail.com')
-    return [
-        user_repository.add(user1),
-        user_repository.add(user2),
-        user_repository.add(user3),
-    ]
 
 
 def test_add_should_save_a_new_user_in_db(user_repository):
