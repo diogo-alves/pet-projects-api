@@ -39,7 +39,13 @@ def user_repository(db_session):
 
 @pytest.fixture
 def user(user_repository) -> User:
-    user = User(first_name='user', email='user@mail.com')
+    user = User(first_name='user', email='user@mail.com', password='123456')
+    return user_repository.add(user)
+
+
+@pytest.fixture
+def inactive_user(user_repository) -> User:
+    user = User(email='user@mail.com', password='123456', is_active=False)
     return user_repository.add(user)
 
 
