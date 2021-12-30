@@ -75,3 +75,38 @@ def test_createsuperuser_should_raise_an_error_if_email_already_exists(
     result = runner.invoke(manage_command, cli_args)
     assert 'User with this email already exists' in result.output
     assert user_service._email_exists(superuser_email) is True
+
+
+def test_changepassword_should_change_user_password(
+    mock_get_user_service, user
+):
+    user_email = user.email
+    new_password = 'new-password'
+    cli_args = [
+        'users',
+        'changepassword',
+        '--user-email',
+        user_email,
+        '--new-password',
+        new_password,
+    ]
+    result = runner.invoke(manage_command, cli_args)
+    assert 'Password changed successfully' in result.output
+    assert user.verify_password(new_password) is True
+
+
+def test_changepassword_should_raise_an_error_if_user_email_does_not_exist(
+    mock_get_user_service, user_service
+):
+    user_email = 'admin@mail.com'
+    cli_args = [
+        'users',
+        'changepassword',
+        '--user-email',
+        user_email,
+        '--new-password',
+        'new-password',
+    ]
+    result = runner.invoke(manage_command, cli_args)
+    assert f'User with email {user_email!r} does not exist' in result.output
+    assert user_service._email_exists(user_email) is False
