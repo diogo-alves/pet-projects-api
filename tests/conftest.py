@@ -1,11 +1,13 @@
 from typing import List
 
 import pytest
+from fastapi.testclient import TestClient
 from sqlalchemy import create_engine
 from sqlalchemy_utils import create_database, database_exists, drop_database
 
 from app.core.config import settings
-from app.database import SessionLocal
+from app.database import SessionLocal, generate_db_session
+from app.main import app
 from app.models import Base, Project, User
 from app.repositories import ProjectRepository, UserRepository
 from app.services import UserService
@@ -13,7 +15,10 @@ from app.services import UserService
 
 @pytest.fixture(scope='session')
 def db():
-    engine = create_engine('sqlite:///./test.db')
+    engine = create_engine(
+        'sqlite:///./test.db',
+        connect_args={'check_same_thread': False},
+    )
     if database_exists(engine.url):
         drop_database(engine.url)
     create_database(engine.url)
@@ -32,6 +37,13 @@ def db_session(db):
     session.close()
     transaction.rollback()
     connection.close()
+
+
+@pytest.fixture
+def client(db_session):
+    app.dependency_overrides[generate_db_session] = lambda: db_session
+    with TestClient(app) as test_client:
+        yield test_client
 
 
 @pytest.fixture
