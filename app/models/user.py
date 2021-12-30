@@ -7,15 +7,8 @@ from app.core.security import check_password, hash_password
 
 from .base import Base
 
-if TYPE_CHECKING:
-    # avoid circular import
+if TYPE_CHECKING:  # pragma: no cover
     from .project import Project
-
-    # mypy does not suports hybrid property
-    # https://github.com/python/mypy/issues/4430
-    hybrid_property = property
-else:
-    from sqlalchemy.ext.hybrid import hybrid_property
 
 
 class User(Base):
@@ -33,7 +26,7 @@ class User(Base):
         'Project', back_populates='owner', cascade='all, delete'
     )
 
-    @hybrid_property
+    @property
     def password(self) -> str:
         return self._password
 
