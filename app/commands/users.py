@@ -11,7 +11,7 @@ from app.services import UserService
 app = typer.Typer()
 
 
-def get_user_service():
+def get_user_service():  # pragma: no cover
     db = next(generate_db_session())
     user_repository = UserRepository(db)
     return UserService(user_repository)
@@ -89,5 +89,5 @@ def change_password(
         typer.echo(message)
 
 
-if __name__ == '__main__':
+if __name__ == '__main__':  # pragma: no cover
     app()

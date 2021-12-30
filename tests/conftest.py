@@ -4,9 +4,11 @@ import pytest
 from sqlalchemy import create_engine
 from sqlalchemy_utils import create_database, database_exists, drop_database
 
+from app.core.config import settings
 from app.database import SessionLocal
 from app.models import Base, Project, User
 from app.repositories import ProjectRepository, UserRepository
+from app.services import UserService
 
 
 @pytest.fixture(scope='session')
@@ -46,6 +48,16 @@ def user(user_repository) -> User:
 @pytest.fixture
 def inactive_user(user_repository) -> User:
     user = User(email='user@mail.com', password='123456', is_active=False)
+    return user_repository.add(user)
+
+
+@pytest.fixture
+def superuser(user_repository) -> User:
+    user = User(
+        email=settings.DEFAULT_SUPERUSER_EMAIL,
+        password='123456',
+        is_active=False,
+    )
     return user_repository.add(user)
 
 
@@ -102,3 +114,8 @@ def projects(project_repository, users) -> List[Project]:
         project_repository.add(project2),
         project_repository.add(project3),
     ]
+
+
+@pytest.fixture
+def user_service(user_repository):
+    return UserService(user_repository)

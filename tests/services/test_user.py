@@ -3,12 +3,6 @@ import pytest
 from app.exceptions import EmailAlreadyRegistredError, NotFoundError
 from app.models import User
 from app.schemas import UserBase
-from app.services import UserService
-
-
-@pytest.fixture
-def user_service(user_repository):
-    return UserService(user_repository)
 
 
 def test_create_user_should_return_an_user(user_service):
