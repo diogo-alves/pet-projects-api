@@ -1,46 +1,4 @@
-from typing import List
-
-import pytest
-
 from app.models import Project
-
-
-@pytest.fixture
-def project(project_repository, user) -> Project:
-    project = Project(
-        title='Project1',
-        description='My project',
-        url='myproject.com',
-        owner_id=user.id,
-    )
-    return project_repository.add(project)
-
-
-@pytest.fixture
-def projects(project_repository, users) -> List[Project]:
-    project1 = Project(
-        title='Project1',
-        description='My First project',
-        url='myproject1.com',
-        owner_id=users[0].id,
-    )
-    project2 = Project(
-        title='Project1',
-        description='My Second project',
-        url='myproject2.com',
-        owner_id=users[1].id,
-    )
-    project3 = Project(
-        title='Project3',
-        description='My Third project',
-        url='myproject3.com',
-        owner_id=users[1].id,
-    )
-    return [
-        project_repository.add(project1),
-        project_repository.add(project2),
-        project_repository.add(project3),
-    ]
 
 
 def test_add_should_save_a_new_project_in_db(project_repository, user):

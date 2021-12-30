@@ -5,7 +5,7 @@ from sqlalchemy import create_engine
 from sqlalchemy_utils import create_database, database_exists, drop_database
 
 from app.database import SessionLocal
-from app.models import Base, User
+from app.models import Base, Project, User
 from app.repositories import ProjectRepository, UserRepository
 
 
@@ -58,3 +58,41 @@ def users(user_repository) -> List[User]:
 @pytest.fixture
 def project_repository(db_session):
     return ProjectRepository(db_session)
+
+
+@pytest.fixture
+def project(project_repository, user) -> Project:
+    project = Project(
+        title='Project1',
+        description='My project',
+        url='myproject.com',
+        owner_id=user.id,
+    )
+    return project_repository.add(project)
+
+
+@pytest.fixture
+def projects(project_repository, users) -> List[Project]:
+    project1 = Project(
+        title='Project1',
+        description='My First project',
+        url='http://myproject1.com',
+        owner_id=users[0].id,
+    )
+    project2 = Project(
+        title='Project1',
+        description='My Second project',
+        url='http://myproject2.com',
+        owner_id=users[1].id,
+    )
+    project3 = Project(
+        title='Project3',
+        description='My Third project',
+        url='http://myproject3.com',
+        owner_id=users[1].id,
+    )
+    return [
+        project_repository.add(project1),
+        project_repository.add(project2),
+        project_repository.add(project3),
+    ]
