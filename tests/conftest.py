@@ -76,7 +76,7 @@ def superuser(user_repository) -> User:
     user = User(
         email=settings.DEFAULT_SUPERUSER_EMAIL,
         password='123456',  # type: ignore
-        is_active=False,
+        is_superuser=False,
     )
     return user_repository.add(user)
 
