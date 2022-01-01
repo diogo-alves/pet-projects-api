@@ -42,4 +42,9 @@ jobs:
         run: poetry install --no-interaction
 
       - name: Run tests
-        run: poetry run pytest -v --cov=app
+        run: poetry run pytest -v --cov=app --cov-report=xml
+
+      - name: "Upload coverage to Codecov"
+        uses: codecov/codecov-action@v2
+        with:
+          fail_ci_if_error: true
