@@ -1,13 +1,11 @@
 from typing import List
 
 import pytest
-from fastapi.testclient import TestClient
 from sqlalchemy import create_engine
 from sqlalchemy_utils import create_database, database_exists, drop_database
 
 from app.core.config import settings
-from app.database import SessionLocal, generate_db_session
-from app.main import app
+from app.database import SessionLocal
 from app.models import Base, Project, User
 from app.repositories import ProjectRepository, UserRepository
 from app.services import UserService
@@ -40,13 +38,6 @@ def db_session(db):
 
 
 @pytest.fixture
-def client(db_session):
-    app.dependency_overrides[generate_db_session] = lambda: db_session
-    with TestClient(app) as test_client:
-        yield test_client
-
-
-@pytest.fixture
 def user_repository(db_session):
     return UserRepository(db_session)
 
@@ -76,16 +67,30 @@ def superuser(user_repository) -> User:
     user = User(
         email=settings.DEFAULT_SUPERUSER_EMAIL,
         password='123456',  # type: ignore
-        is_superuser=False,
+        is_superuser=True,
     )
     return user_repository.add(user)
 
 
 @pytest.fixture
 def users(user_repository) -> List[User]:
-    user1 = User(first_name='user1', email='user1@mail.com', is_superuser=True)
-    user2 = User(first_name='user2', email='user2@mail.com', is_superuser=True)
-    user3 = User(first_name='user3', email='user3@mail.com')
+    user1 = User(
+        first_name='user1',
+        email='user1@mail.com',
+        password='123456',  # type: ignore
+        is_superuser=True,
+    )
+    user2 = User(
+        first_name='user2',
+        email='user2@mail.com',
+        password='123456',  # type: ignore
+        is_superuser=True,
+    )
+    user3 = User(
+        first_name='user3',
+        email='user3@mail.com',
+        password='123456',  # type: ignore
+    )
     return [
         user_repository.add(user1),
         user_repository.add(user2),
@@ -103,7 +108,7 @@ def project(project_repository, user) -> Project:
     project = Project(
         title='Project1',
         description='My project',
-        url='myproject.com',
+        url='http://myproject.com',
         owner_id=user.id,
     )
     return project_repository.add(project)
