@@ -4,19 +4,27 @@ from pydantic import BaseModel, EmailStr
 
 
 class UserBase(BaseModel):
-    email: EmailStr
+    email: Optional[EmailStr]
     first_name: Optional[str] = None
     last_name: Optional[str] = None
 
 
-class UserIn(UserBase):
+class UserCreate(UserBase):
+    email: EmailStr
     password: str
 
 
-class FullUserIn(UserBase):
-    password: str
-    is_active: Optional[bool] = True
+class UserUpdate(UserBase):
+    password: Optional[str]
+    is_active: Optional[bool]
+
+
+class SuperuserCreate(UserCreate):
     is_superuser: bool = False
+
+
+class SuperuserUpdate(UserUpdate):
+    is_superuser: Optional[bool] = False
 
 
 class UserOut(UserBase):

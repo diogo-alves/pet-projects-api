@@ -16,7 +16,9 @@ router = APIRouter(prefix='/users', tags=['Users'])
     response_model=schemas.UserOut,
     summary='Register a new user',
 )
-def register(payload: schemas.UserIn, user_service: UserService = Depends()):
+def register(
+    payload: schemas.UserCreate, user_service: UserService = Depends()
+):
     return user_service.create(payload)
 
 
@@ -65,7 +67,7 @@ def retrieve_logged(
     },
 )
 def update_logged(
-    payload: schemas.UserIn,
+    payload: schemas.UserUpdate,
     user_service: UserService = Depends(),
     current_user: models.User = Depends(get_current_user),
 ):
@@ -127,7 +129,7 @@ def retrieve(
 )
 def update(
     id: int,
-    payload: schemas.FullUserIn,
+    payload: schemas.SuperuserUpdate,
     user_service: UserService = Depends(),
 ):
     return user_service.update_by_id(id, payload)

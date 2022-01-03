@@ -5,7 +5,7 @@ from app.core.config import settings
 from app.database import generate_db_session
 from app.exceptions import EmailAlreadyRegistredError, NotFoundError
 from app.repositories import UserRepository
-from app.schemas import FullUserIn
+from app.schemas import SuperuserCreate
 from app.services import UserService
 
 app = typer.Typer()
@@ -30,7 +30,7 @@ def create_superuser(
     user_service = get_user_service()
     message = ''
     try:
-        superuser = FullUserIn(
+        superuser = SuperuserCreate(
             email=email,
             password=password,
             is_superuser=True,

@@ -13,7 +13,7 @@ class UserService:
     ) -> None:
         self.repository = repository
 
-    def create(self, payload: schemas.UserBase) -> models.User:
+    def create(self, payload: schemas.UserCreate) -> models.User:
         if self._email_exists(payload.email):
             raise EmailAlreadyRegistredError()
         fields = payload.dict()
@@ -43,16 +43,22 @@ class UserService:
             raise NotFoundError()
         return user
 
-    def update_by_id(self, id: int, payload: schemas.UserBase) -> models.User:
+    def update_by_id(
+        self, id: int, payload: schemas.UserUpdate
+    ) -> models.User:
         user = self.get_by_id(id)
         return self.update(user, payload)
 
     def update(
-        self, user: models.User, payload: schemas.UserBase
+        self, user: models.User, payload: schemas.UserUpdate
     ) -> models.User:
-        if user.email != payload.email and self._email_exists(payload.email):
+        if (
+            payload.email is not None
+            and payload.email != user.email
+            and self._email_exists(payload.email)
+        ):
             raise EmailAlreadyRegistredError()
-        fields = payload.dict()
+        fields = payload.dict(exclude_unset=True)
         for field, value in fields.items():
             setattr(user, field, value)
         return self.repository.update(user)
