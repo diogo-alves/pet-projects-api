@@ -5,7 +5,7 @@ description = "An API to aggregate personal projects"
 authors = ["Diogo Alves <diogo.alves.ti@gmail.com>"]
 
 [tool.poetry.dependencies]
-python = "^3.10"
+python = "3.10.1"
 fastapi = "^0.70.0"
 uvicorn = "^0.15.0"
 pydantic = {extras = ["email", "dotenv"], version = "^1.8.2"}
