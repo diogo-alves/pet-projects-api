@@ -1,6 +1,6 @@
 from typing import List
 
-from pydantic import BaseSettings
+from pydantic import BaseSettings, validator
 from pydantic.networks import AnyHttpUrl
 
 
@@ -13,6 +13,15 @@ class Settings(BaseSettings):
     DEFAULT_SUPERUSER_EMAIL: str
     SECRET_KEY: str
     CORS_ALLOWED_ORIGINS: List[AnyHttpUrl] = []
+
+    @validator('DATABASE_URL')
+    def normalize_database_dialetic(cls, db_url):
+        # "postgres://" dialect has been deprecated in SQLAlchemy 1.4,
+        # but is still used by Heroku
+        # https://github.com/sqlalchemy/sqlalchemy/issues/6083
+        if db_url.startswith('postgres://'):
+            db_url = db_url.replace('postgres://', 'postgresql://')
+        return db_url
 
     class Config:
         env_file = '.env'
