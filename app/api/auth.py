@@ -2,8 +2,7 @@ from fastapi import APIRouter, Depends, status
 from fastapi.security import OAuth2PasswordRequestForm
 
 from app import schemas
-from app.core.security import generate_access_token
-from app.services import AuthenticationService
+from app.services import AuthenticationService, TokenService
 
 router = APIRouter(prefix='/auth', tags=['Authentication'])
 
@@ -22,10 +21,11 @@ router = APIRouter(prefix='/auth', tags=['Authentication'])
 def login_access_token(
     form_data: OAuth2PasswordRequestForm = Depends(),
     auth_service: AuthenticationService = Depends(),
+    token_service: TokenService = Depends(),
 ):
     user = auth_service.authenticate(form_data.username, form_data.password)
     claims = {'sub': user.email}
     return {
-        'access_token': generate_access_token(claims),
+        'access_token': token_service.generate_access_token(claims),
         'token_type': 'bearer',
     }

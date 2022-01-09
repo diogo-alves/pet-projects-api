@@ -1,3 +1,4 @@
+from functools import lru_cache
 from typing import List
 
 from pydantic import BaseSettings, validator
@@ -12,6 +13,7 @@ class Settings(BaseSettings):
     DATABASE_URL: str
     DEFAULT_SUPERUSER_EMAIL: str
     SECRET_KEY: str
+    JWT_SIGNING_ALGORITHM: str = 'HS256'
     CORS_ALLOWED_ORIGINS: List[AnyHttpUrl] = []
 
     @validator('DATABASE_URL')
@@ -28,4 +30,9 @@ class Settings(BaseSettings):
         case_sensitive = True
 
 
-settings = Settings()
+@lru_cache()
+def get_settings():
+    return Settings()
+
+
+settings = get_settings()
