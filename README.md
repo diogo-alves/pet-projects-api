@@ -50,42 +50,39 @@ git clone git@github.com:diogo-alves/pet-projects-api.git
 cd pet-projects-api
 ```
 
-3. Install the python dependencies:
+3. Install the project dependencies:
 
 ```shell
-poetry install
+make install
 ```
 
-4. Create an ```.env```¹ file based on ```.env.example``` . Generate the SECRET_KEY with this utility command:
+4. Create an ```.env```¹ file based on ```.env.example``` . To generate the SECRET_KEY run:
 
 ```shell
-poetry run python manage.py utils gensecretkey
+make secret-key
 ```
 ¹ NOTE: <small>By running the app locally, you can set DATABASE_URL to use SQLite without having to install a database system.</small>
 
-## Run Locally
+## Running
 
-1. Run server
+### Locally
+
 ```shell
-poetry run uvicorn app.main:app --reload
+make local
 ```
 
-2. Run database migrations:
+### With Docker
+
 ```shell
-poetry run alembic upgrade head
+make docker
 ```
 
-## Run With docker-compose
+### Tests
 
-1. Start services (Web server, PostgreSQL and pgAdmin)
 ```shell
-docker-compose up -d
+make tests
 ```
 
-2. Run database migrations:
-```shell
-docker-compose exec web alembic upgrade head
-```
 
 ## View in Browser
 
@@ -93,17 +90,11 @@ docker-compose exec web alembic upgrade head
 - pgAdmin: [```http://localhost:5050```](http://localhost:5050) (only running with docker)
 
 
-## Run Tests
-
-```shell
-poetry run pytest --cov=app
-```
-
 ## Management Commands
 
 To see all commands type:
 ```shell
-poetry run python manage.py --help
+make commands
 ```
 
 ## API Documentation
