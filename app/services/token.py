@@ -11,24 +11,28 @@ from app.exceptions.exceptions import AuthenticationError
 
 class TokenService:
     def __init__(self, settings: Settings = Depends(get_settings)) -> None:
-        self.secret = settings.SECRET_KEY
-        self.algorithm = settings.JWT_SIGNING_ALGORITHM
-        self.issuer = settings.APP_NAME
-        self.issued_at = datetime.utcnow()
-        self.lifetime = timedelta(
-            minutes=settings.ACCESS_TOKEN_EXPIRATION_MINUTES
-        )
-        self.expiration_time = self.issued_at + self.lifetime
+        self.settings = settings
 
     def generate_access_token(self, claims: dict) -> str:
-        claims['iat'] = self.issued_at
-        claims['exp'] = self.expiration_time
-        claims['iss'] = self.issuer
-        return jwt.encode(claims, self.secret, self.algorithm)
+        issued_at: datetime = datetime.utcnow()
+        lifetime: timedelta = timedelta(
+            minutes=self.settings.ACCESS_TOKEN_EXPIRATION_MINUTES
+        )
+        claims['iat'] = issued_at
+        claims['exp'] = issued_at + lifetime
+        return jwt.encode(
+            claims,
+            self.settings.SECRET_KEY,
+            self.settings.JWT_SIGNING_ALGORITHM,
+        )
 
     def decode_access_token(self, token: str) -> Mapping:
         try:
-            return jwt.decode(token, self.secret, self.algorithm)
+            return jwt.decode(
+                token,
+                self.settings.SECRET_KEY,
+                self.settings.JWT_SIGNING_ALGORITHM,
+            )
         except ExpiredSignatureError as exc:
             raise AuthenticationError('The token has expired.') from exc
         except JWTClaimsError as exc:
