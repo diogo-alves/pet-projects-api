@@ -1,7 +1,6 @@
 import pytest
 from typer.testing import CliRunner
 
-from app.core.config import settings
 from manage import app as manage_command
 
 runner = CliRunner()
@@ -15,7 +14,7 @@ def mock_get_user_service(mocker, user_service):
 
 
 def test_createsuperuser_should_create_a_superuser_with_default_email(
-    mock_get_user_service, user_service
+    mock_get_user_service, user_service, settings
 ):
     cli_args = ['users', 'createsuperuser', '--password', '123456']
     result = runner.invoke(manage_command, cli_args)

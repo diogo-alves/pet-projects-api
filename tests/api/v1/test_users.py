@@ -1,11 +1,9 @@
 import pytest
 from fastapi import status
 
-from app.core.config import settings
-
 
 @pytest.fixture
-def base_url() -> str:
+def base_url(settings) -> str:
     return f'{settings.API_PREFIX}{settings.API_V1_PREFIX}'
 
 

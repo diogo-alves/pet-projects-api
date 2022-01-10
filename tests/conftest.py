@@ -4,7 +4,7 @@ import pytest
 from sqlalchemy import create_engine
 from sqlalchemy_utils import create_database, database_exists, drop_database
 
-from app.core.config import settings
+from app.core.config import Settings
 from app.database import SessionLocal
 from app.models import Base, Project, User
 from app.repositories import ProjectRepository, UserRepository
@@ -12,11 +12,17 @@ from app.services import UserService
 
 
 @pytest.fixture(scope='session')
-def db():
-    engine = create_engine(
-        'sqlite:///./test.db',
-        connect_args={'check_same_thread': False},
+def settings():
+    return Settings(
+        SECRET_KEY='secret',
+        DATABASE_URL='sqlite:///./test.db?check_same_thread=False',
+        DEFAULT_SUPERUSER_EMAIL='admin@mail.com',
     )
+
+
+@pytest.fixture(scope='session')
+def db(settings):
+    engine = create_engine(settings.DATABASE_URL)
     if database_exists(engine.url):
         drop_database(engine.url)
     create_database(engine.url)
@@ -63,7 +69,7 @@ def inactive_user(user_repository) -> User:
 
 
 @pytest.fixture
-def superuser(user_repository) -> User:
+def superuser(user_repository, settings) -> User:
     user = User(
         email=settings.DEFAULT_SUPERUSER_EMAIL,
         password='123456',  # type: ignore

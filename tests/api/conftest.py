@@ -3,20 +3,21 @@ from typing import Callable, Dict
 import pytest
 from fastapi.testclient import TestClient
 
-from app.core.config import settings
+from app.core.config import get_settings
 from app.database import generate_db_session
 from app.main import app
 
 
 @pytest.fixture
-def client(db_session):
+def client(db_session, settings):
     app.dependency_overrides[generate_db_session] = lambda: db_session
+    app.dependency_overrides[get_settings] = lambda: settings
     with TestClient(app) as test_client:
         yield test_client
 
 
 @pytest.fixture
-def get_user_authorization_headers(client) -> Callable:
+def get_user_authorization_headers(client, settings) -> Callable:
     def _get_user_autorization_headers(
         username: str, password: str
     ) -> Dict[str, str]:
@@ -26,6 +27,7 @@ def get_user_authorization_headers(client) -> Callable:
         content = response.json()
         token = content.get('access_token')
         headers = {'Authorization': f'Bearer {token}'}
+
         return headers
 
     return _get_user_autorization_headers

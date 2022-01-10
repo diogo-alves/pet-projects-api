@@ -1,11 +1,9 @@
 import pytest
 from fastapi import status
 
-from app.core.config import settings
-
 
 @pytest.fixture
-def url():
+def url(settings):
     return f'{settings.API_PREFIX}/auth/token'
 
 
