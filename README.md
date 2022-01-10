@@ -21,8 +21,8 @@ An API to aggregate personal projects.
 
 ## Live Preview
 
-See the [live preview](https://pet-projects-api.herokuapp.com/docs) deployed at Heroku.
-[![pet-projects-api](https://i.imgur.com/haTcMnI.png)](https://pet-projects-api.herokuapp.com/docs)
+See the [live preview](https://pet-projects-api.herokuapp.com/api/docs) deployed at Heroku.
+[![pet-projects-api](https://i.imgur.com/haTcMnI.png)](https://pet-projects-api.herokuapp.com/api/docs)
 
 
 ## Getting Started
@@ -86,7 +86,7 @@ make tests
 
 ## View in Browser
 
-- API: [```http://localhost:8000/docs```](http://localhost:8000/docs)
+- API: [```http://localhost:8000/api/docs```](http://localhost:8000/api/docs)
 - pgAdmin: [```http://localhost:5050```](http://localhost:5050) (only running with docker)
 
 
@@ -99,8 +99,8 @@ make commands
 
 ## API Documentation
 
-- Swagger UI: [```(http://localhost:8000/docs/```](http://localhost:8000/docs/)
-- Redoc: [```http://localhost:8000/redoc```](http://localhost:8000/redoc)
+- Swagger UI: [```(http://localhost:8000/api/docs/```](http://localhost:8000/api/docs/)
+- Redoc: [```http://localhost:8000/api/redoc```](http://localhost:8000/api/redoc)
 
 
 ## License

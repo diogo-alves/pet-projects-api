@@ -18,6 +18,8 @@ app = FastAPI(
         'name': 'MIT License',
         'url': 'https://mit-license.org/',
     },
+    docs_url=f'{settings.API_PREFIX}/docs',
+    redoc_url=f'{settings.API_PREFIX}/redoc',
     openapi_tags=[
         {
             'name': 'Authentication',
